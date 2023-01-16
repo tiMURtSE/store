@@ -29,10 +29,10 @@ export const publicRoutes = [
         path: REGISTRATION_ROUTE,
         element: <Auth/>
     },
-    {
-        path: SHOP_ROUTE,
-        element: <Shop/>,
-    },
+    // {
+    //     path: SHOP_ROUTE,
+    //     element: <Shop/>,
+    // },
     {
         path: '*',
         element: <Shop/>
