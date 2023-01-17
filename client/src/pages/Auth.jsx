@@ -1,9 +1,10 @@
 import React from 'react';
+import Registration from '../components/registration/Registration';
 
 const Auth = () => {
     return (
-        <div>
-            AUTH
+        <div className='container'>
+            <Registration />
         </div>
     );
 };

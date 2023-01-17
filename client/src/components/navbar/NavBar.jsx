@@ -1,13 +1,15 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
+
 import { Context } from '../..';
-import Button from '../ui/button/Button';
 import classes from './NavBar.module.css';
+import Button from '../ui/button/Button';
 
 const NavBar = observer(() => {
     const { user } = useContext(Context);
 
+    console.log('NavBar render')
     return (
         <header className='header'>
             <div className="container">

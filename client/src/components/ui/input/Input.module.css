@@ -1,0 +1,7 @@
+.input {
+    padding: 3px 5px;
+    min-width: 250px;
+
+    font-size: 14px;
+    border: 1px solid var(--dark);
+}

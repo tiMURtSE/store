@@ -3,10 +3,17 @@
 
 
     border: 1px solid var(--light);
-    border-radius: 0.5em;
     cursor: pointer;
 }
 
 .btn:hover {
     border-color: #fff;
+}
+
+.dark {
+    border: 1px solid var(--dark);
+}
+
+.dark:hover {
+    border-color: #000;
 }

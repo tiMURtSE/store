@@ -1,9 +1,11 @@
 import React from 'react';
 import classes from './Button.module.css';
 
-const Button = ({ children, ...props}) => {
+const Button = ({ children, isDark, ...props}) => {
+    const btnClass = classes.btn + (isDark ? ` ${classes.dark}` : '');
+    
     return (
-        <button className={classes.btn} {...props}>
+        <button className={btnClass} {...props}>
             {children}
         </button>
     );

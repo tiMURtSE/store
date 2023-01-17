@@ -1,14 +1,15 @@
 import React, { useContext } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Context } from '..';
+
 import SharedLayout from '../pages/SharedLayout';
 import Shop from '../pages/Shop';
-
+import { Context } from '..';
 import { authRoutes, publicRoutes } from '../routes/routes';
 
 const AppRouter = () => {
     const { user } = useContext(Context);
 
+    console.log('AppRouter render');
     return (
         <Routes>
             <Route path='/' element={<SharedLayout />}>
