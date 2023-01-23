@@ -1,13 +1,23 @@
 import React, {useContext, useState} from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import {Container, Form, Card} from "react-bootstrap";
-import Button from "react-bootstrap/Button";
+import { Container, Form, Card, Button, Row } from "react-bootstrap";
 
 import {LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE} from "../utils/consts";
+import { login, registration } from '../http/userAPI';
 
 const Auth = () => {
     const location = useLocation();
     const isLogin = location.pathname === LOGIN_ROUTE;
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const click = async () => {
+        if (isLogin) {
+            const response = await login();
+        } else {
+            const response = await registration(email, password);
+            console.log(response)
+        }
+    };
     
     return (
         <Container
@@ -20,34 +30,34 @@ const Auth = () => {
                     <Form.Control
                         className="mt-3"
                         placeholder="Введите ваш email..."
-                        // value={email}
-                        // onChange={e => setEmail(e.target.value)}
+                        value={email}
+                        onChange={event => setEmail(event.target.value)}
                     />
                     <Form.Control
                         className="mt-3"
                         placeholder="Введите ваш пароль..."
-                        // value={password}
-                        // onChange={e => setPassword(e.target.value)}
+                        value={password}
+                        onChange={event => setPassword(event.target.value)}
                         type="password"
                     />
-                    <Form className="d-flex justify-content-between mt-3 pl-3 pr-3">
+                    <Row className="d-flex justify-content-between align-items-center mt-3 ps-3 pe-3">
                         {isLogin ?
-                            <div>
+                            <div style={{width: 'auto'}}>
                                 Нет аккаунта? <NavLink to={REGISTRATION_ROUTE}>Зарегистрируйся!</NavLink>
                             </div>
                             :
-                            <div>
+                            <div style={{width: 'auto'}}>
                                 Есть аккаунт? <NavLink to={LOGIN_ROUTE}>Войдите!</NavLink>
                             </div>
                         }
                         <Button
+                            style={{width: 'auto'}}
                             variant={"outline-success"}
-                            // onClick={click}
+                            onClick={click}
                         >
                             {isLogin ? 'Войти' : 'Регистрация'}
                         </Button>
-                    </Form>
-
+                    </Row>
                 </Form>
             </Card>
         </Container>

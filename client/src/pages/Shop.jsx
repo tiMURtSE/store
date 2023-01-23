@@ -3,6 +3,7 @@ import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import BrandBar from '../components/BrandBar';
 import TypeBar from '../components/TypeBar';
+import DeviceList from '../components/DeviceList';
 
 const Shop = observer(() => {
     return (
@@ -13,6 +14,7 @@ const Shop = observer(() => {
                 </Col>
                 <Col md={9}>
                     <BrandBar/>
+                    <DeviceList />
                 </Col>
             </Row>
         </Container>

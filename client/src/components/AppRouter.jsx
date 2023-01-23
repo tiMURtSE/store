@@ -9,7 +9,6 @@ import { authRoutes, publicRoutes } from '../routes/routes';
 const AppRouter = () => {
     const { user } = useContext(Context);
 
-    console.log('AppRouter render');
     return (
         <Routes>
             <Route path='/' element={<SharedLayout />}>

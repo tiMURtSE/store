@@ -7,6 +7,7 @@ import UserStore from './store/UserStore';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const Context = createContext(null);
+console.log(process.env.REACT_APP_API_URL)
 
 root.render(
     <React.StrictMode>
