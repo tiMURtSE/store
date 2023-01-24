@@ -5,10 +5,11 @@ import SharedLayout from '../pages/SharedLayout';
 import Shop from '../pages/Shop';
 import { Context } from '..';
 import { authRoutes, publicRoutes } from '../routes/routes';
+import { observer } from 'mobx-react-lite';
 
-const AppRouter = () => {
+const AppRouter = observer(() => {
     const { user } = useContext(Context);
-
+    
     return (
         <Routes>
             <Route path='/' element={<SharedLayout />}>
@@ -26,6 +27,6 @@ const AppRouter = () => {
             </Route>
         </Routes>
     );
-};
+});
 
 export default AppRouter;

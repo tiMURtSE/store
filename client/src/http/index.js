@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// зарпос, не требующий авторизации
+// запрос, не требующий авторизации
 const $host = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
 });
@@ -11,6 +11,8 @@ const $authHost = axios.create({
 
 const authInterceptor = (config) => {
     config.headers.authorization = `Bearer ${localStorage.getItem('token')}`;
+    // по идее interceptor должен возвращать объект из аргумента
+    return config;
 }
 
 $authHost.interceptors.request.use(authInterceptor);
