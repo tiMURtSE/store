@@ -7,12 +7,18 @@ import { Context } from '../..';
 const CreateDevice = ({ show, onHide }) => {
     const { device } = useContext(Context);
     const [info, setInfo] = useState([]);
+    const [deviceName, setDeviceName] = useState('');
+    const [devicePrice, setDevicePrice] = useState(0);
+    const [deviceImageFile, setDeviceImageFile] = useState(null);
+
     const addInfo = () => {
         setInfo([...info, {title: '', description: '', number: Date.now()}]);
     };
     const removeInfo = (number) => {
         setInfo(info.filter(element => element.number !== number));
     };
+
+
 
     return (
         <Modal
@@ -25,6 +31,7 @@ const CreateDevice = ({ show, onHide }) => {
                     Добавить девайс
                 </Modal.Title>
             </Modal.Header>
+
             <Modal.Body>
                 <Form>
                     <Dropdown className="mt-2">
@@ -44,10 +51,14 @@ const CreateDevice = ({ show, onHide }) => {
                         </Dropdown.Menu>
                     </Dropdown>
                     <Form.Control
+                        value={deviceName}
+                        onChange={event => setDeviceName(event.target.value)}
                         className='mt-3'
                         placeholder='Введите название устройства'
                     />
                     <Form.Control
+                        value={devicePrice}
+                        onChange={event => setDevicePrice(event.target.value)}
                         className='mt-3'
                         placeholder='Введите цену устройства'
                         type='number'
@@ -86,6 +97,7 @@ const CreateDevice = ({ show, onHide }) => {
                     )}
                 </Form>
             </Modal.Body>
+
             <Modal.Footer>
                 <Button variant="outline-success">Добавить</Button>
                 <Button onClick={onHide} variant="outline-danger">Закрыть</Button>
