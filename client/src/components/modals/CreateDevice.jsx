@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useContext } from 'react';
 import { Modal, Form, Button, Dropdown, Row, Col } from 'react-bootstrap';
 import { Context } from '../..';
-import { fetchBrands, fetchTypes } from '../../http/deviceAPI';
+import { createDevice, fetchBrands, fetchTypes } from '../../http/deviceAPI';
 
 const CreateDevice = observer(({ show, onHide }) => {
     const { device } = useContext(Context);
@@ -14,7 +14,7 @@ const CreateDevice = observer(({ show, onHide }) => {
     const [deviceImageFile, setDeviceImageFile] = useState(null);
 
     const addCharacteristics = () => {
-        setCharacteristics([...characteristics, {title: '', description: '', number: Date.now()}]);
+        setCharacteristics([...characteristics, {name: '', description: '', number: Date.now()}]);
     };
     const removeCharacteristics = (number) => {
         setCharacteristics(characteristics.filter(element => element.number !== number));
@@ -25,7 +25,6 @@ const CreateDevice = observer(({ show, onHide }) => {
 
         setDeviceImageFile(file);
     };
-
     const setCharacteristicsDescription = (key, value, number) => {
         const result = characteristics.map(element => {
             if (element.number === number) {
@@ -34,8 +33,22 @@ const CreateDevice = observer(({ show, onHide }) => {
                 return element;
             }
         });
-        console.log(result);
+
         setCharacteristics(result);
+    };
+
+    const addNewDevice = () => {
+        const newDevice = new FormData();
+
+        newDevice.append('typeId', device.selectedType.id);
+        newDevice.append('brandId', device.selectedBrand.id);
+        newDevice.append('name', deviceName);
+        newDevice.append('price', `${devicePrice}`);
+        newDevice.append('info', JSON.stringify(characteristics));
+        newDevice.append('img', deviceImageFile);
+
+        createDevice(newDevice)
+            .then(data => onHide());
     };
 
     useEffect(() => {
@@ -92,7 +105,7 @@ const CreateDevice = observer(({ show, onHide }) => {
                     <Form.Control
                         className='mt-3'
                         type='file'
-                        onChange={(event) => selectDeviceImageFile(event)}
+                        onChange={selectDeviceImageFile}
                         
                     />
                     <hr/>
@@ -105,8 +118,8 @@ const CreateDevice = observer(({ show, onHide }) => {
                         <Row key={i.number} className='mt-4'>
                             <Col md={4}>
                                 <Form.Control
-                                    value={i.title}
-                                    onChange={(event) => setCharacteristicsDescription('title', event.target.value, i.number)}
+                                    value={i.name}
+                                    onChange={(event) => setCharacteristicsDescription('name', event.target.value, i.number)}
                                     placeholder='Введите название свойства'
                                 />
                             </Col>
@@ -131,7 +144,7 @@ const CreateDevice = observer(({ show, onHide }) => {
             </Modal.Body>
 
             <Modal.Footer>
-                <Button onClick={() => console.log(characteristics)} variant="outline-success">Добавить</Button>
+                <Button onClick={addNewDevice} variant="outline-success">Добавить</Button>
                 <Button onClick={onHide} variant="outline-danger">Закрыть</Button>
             </Modal.Footer>
         </Modal>

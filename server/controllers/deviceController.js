@@ -6,8 +6,8 @@ const path = require("path");
 class DeviceController {
     async create(req, res, next) {
         try {
-            let {name, price, brandId, typeId, info} = req.body;
-            const {img} = req.files;
+            let { name, price, brandId, typeId, info } = req.body;
+            const { img } = req.files;
             let fileName = uuid.v4() + ".jpg";
     
             img.mv(path.resolve(__dirname, '..', 'static', fileName));
@@ -30,7 +30,7 @@ class DeviceController {
             next(ApiError.badRequest(error.message));
         }
     }
-
+    
     async getAll(req, res) {
         let {brandId, typeId, limit, page} = req.query;
         let devices;
