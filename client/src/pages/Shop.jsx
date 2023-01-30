@@ -7,6 +7,7 @@ import DeviceList from '../components/DeviceList';
 import { useContext } from 'react';
 import { Context } from '..';
 import { fetchBrands, fetchDevices, fetchTypes } from '../http/deviceAPI';
+import Pages from '../components/Pages';
 
 const Shop = observer(() => {
     const { device } = useContext(Context);
@@ -17,10 +18,17 @@ const Shop = observer(() => {
         
         fetchBrands()
             .then(data => device.setBrands(data))
-
-        fetchDevices()
-            .then(data => device.setDevices(data.rows))
+        // fetchDevices тут должен быть (?) тоже
     }, []);
+
+    useEffect(() => {
+        fetchDevices(device.selectedBrand.id, device.selectedType.id, device.limit, device.selectedPage)
+            .then(data => {
+                device.setDevices(data.rows);
+                device.setTotalCount(data.count);
+                console.log(data);
+            })
+    }, [device.selectedBrand, device.selectedType, device.selectedPage]);
 
     return (
         <Container>
@@ -31,6 +39,7 @@ const Shop = observer(() => {
                 <Col md={9}>
                     <BrandBar/>
                     <DeviceList />
+                    <Pages/>
                 </Col>
             </Row>
         </Container>

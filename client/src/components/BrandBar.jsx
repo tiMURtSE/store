@@ -7,7 +7,7 @@ const BrandBar = observer(() => {
     const {device} = useContext(Context)
 
     return (
-        <Form className="d-flex flex-wrap">
+        <Form className="d-flex flex-wrap align-items-center">
             {device.brands.map(brand =>
                 <Card
                     style={{cursor:'pointer'}}
@@ -19,6 +19,18 @@ const BrandBar = observer(() => {
                     {brand.name}
                 </Card>
             )}
+
+            {
+                (device.selectedBrand.id) && (
+                    <Card
+                        className='d-flex p-2 ms-3'
+                        onClick={() => device.setSelectedBrand({})}
+                        style={{backgroundColor: '#f8d7da', cursor: 'pointer'}}
+                    >
+                        <span>&#10060;</span>
+                    </Card>
+                )
+            }
         </Form>
     );
 });
