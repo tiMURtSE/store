@@ -18,7 +18,6 @@ const Shop = observer(() => {
         
         fetchBrands()
             .then(data => deviceStore.setBrands(data))
-        // fetchDevices тут должен быть (?) тоже
     }, []);
 
     useEffect(() => {

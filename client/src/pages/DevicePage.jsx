@@ -4,15 +4,26 @@ import { useEffect } from 'react';
 import { Button, Card, Col, Container, Form, Image, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import bigStar from '../assets/bigStar.png';
+import { addDeviceInBasket } from '../http/basketAPI';
 import { fetchOneDevice } from '../http/deviceAPI';
+import { checkAuth } from '../http/userAPI';
 
 const DevicePage = () => {
     const [device, setDevice] = useState({info: []});
     const { id } = useParams();
 
     useEffect(() => {
-        fetchOneDevice(id).then(data => setDevice(data))
+        fetchOneDevice(id)
+            .then(data => setDevice(data))
+
     }, []);
+
+    const addToCart = async () => {
+        const { basketId } = await checkAuth();
+        const deviceId = device.id;
+        addDeviceInBasket(basketId, deviceId)
+            .then(data => alert('Товар добавлен в корзину!'));
+    }
 
     return (
         <Container className='mt-3'>
@@ -39,7 +50,12 @@ const DevicePage = () => {
                         style={{width: 300, height: 300, fontSize: 32, border: '5px solid lightgray'}}
                     >
                         <h3>От: {device.price} руб.</h3>
-                        <Button variant={"outline-dark"}>Добавить в корзину</Button>
+                        <Button 
+                            onClick={addToCart}
+                            variant={"outline-dark"}
+                        >
+                            Добавить в корзину
+                        </Button>
                     </Card>
                 </Col>
             </Row>

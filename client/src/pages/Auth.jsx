@@ -1,16 +1,16 @@
 import React, { useContext, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Container, Form, Card, Button, Row } from "react-bootstrap";
 
-import {LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE} from "../utils/consts";
+import { LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE } from "../utils/consts";
 import { login, registration } from '../http/userAPI';
-import { observer } from 'mobx-react-lite';
 import { Context } from '..';
 
 const Auth = observer(() => {
+    const { userStore } = useContext(Context);
     const location = useLocation();
     const navigate = useNavigate();
-    const { user } = useContext(Context);
     const isLogin = location.pathname === LOGIN_ROUTE;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -25,10 +25,11 @@ const Auth = observer(() => {
                 data = await registration(email, password);
             }
 
-            user.setIsAuth(true);
-            user.setUser(data);
+            userStore.setIsAuth(true);
+            userStore.setUser(data);
             navigate(SHOP_ROUTE);
         } catch (error) {
+            console.log(error)
             alert(error.response.data.message);
         }
     };

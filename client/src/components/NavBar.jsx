@@ -9,7 +9,7 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 
 import { Context } from '..';
-import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from '../utils/consts';
+import { ADMIN_ROUTE, BASKET_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from '../utils/consts';
 
 const NavBar = observer(() => {
     const { userStore } = useContext(Context);
@@ -28,6 +28,7 @@ const NavBar = observer(() => {
                 {userStore.isAuth ? (
                     <Nav className="ml-auto" style={{color: 'var(--light)'}}>
                         <Button onClick={() => navigate(ADMIN_ROUTE)} variant={'outline-light'}>Админ. панель</Button>
+                        <Button onClick={() => navigate(BASKET_ROUTE)} variant={'outline-light'} className='ms-4'>Корзина</Button>
                         <Button onClick={() => logOut()} variant={'outline-light'} className='ms-4'>Выйти</Button>
                     </Nav>
                 ) : (

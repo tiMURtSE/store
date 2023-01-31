@@ -3,9 +3,9 @@ const { User, Basket } = require("../models/models");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-const generateJWT = (id, email, role) => {
+const generateJWT = (id, email, role, basketId) => {
     return jwt.sign(
-        {id, email, role},
+        {id, email, role, basketId},
         process.env.SECRET_KEY,
         {expiresIn: '24h'}
     )
@@ -29,7 +29,7 @@ class UserController {
         const hashPassword = await bcrypt.hash(password, 5);
         const user = await User.create({email, role, password: hashPassword});
         const basket = await Basket.create({userId: user.id});
-        const token = generateJWT(user.id, user.email, user.role);
+        const token = generateJWT(user.id, user.email, user.role, basket.id);
         
         return res.json({token});
     }
@@ -37,6 +37,7 @@ class UserController {
     async login(req, res, next) {
         const {email, password} = req.body;
         const user = await User.findOne({where: {email}});
+        const basket = await Basket.findOne({where: {userId: user.id}})
         console.log(user)
 
         if (!user) {
@@ -49,13 +50,14 @@ class UserController {
             return next(ApiError.internal('Неверный пароль'));
         }
 
-        const token = generateJWT(user.id, user.email, user.role);
+        const token = generateJWT(user.id, user.email, user.role, basket.id);
 
         return res.json({token});
     }
 
     async check(req, res) {
-        const token = generateJWT(req.user.id, req.user.email, req.user.role);
+        console.log(req.user)
+        const token = generateJWT(req.user.id, req.user.email, req.user.role, req.user.basketId);
 
         return res.json({token});
     }
