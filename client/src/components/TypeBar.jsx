@@ -1,18 +1,19 @@
 import React, { useContext } from 'react';
 import { observer } from "mobx-react-lite";
-import { Context } from "../index";
 import ListGroup from "react-bootstrap/ListGroup";
 
+import { Context } from "../index";
+
 const TypeBar = observer(() => {
-    const { device } = useContext(Context);
+    const { deviceStore } = useContext(Context);
 
     return (
         <ListGroup>
-            {device.types.map(type =>
+            {deviceStore.types.map(type =>
                 <ListGroup.Item
                     style={{cursor: 'pointer'}}
-                    active={type.id === device.selectedType.id}
-                    onClick={() => device.setSelectedType(type)}
+                    active={type.id === deviceStore.selectedType.id}
+                    onClick={() => deviceStore.setSelectedType(type)}
                     key={type.id}
                 >
                     {type.name}
@@ -20,9 +21,9 @@ const TypeBar = observer(() => {
             )}
 
             {
-                (device.selectedType.id) && (
+                (deviceStore.selectedType.id) && (
                     <ListGroup.Item
-                        onClick={() => device.setSelectedType({})}
+                        onClick={() => deviceStore.setSelectedType({})}
                         style={{textAlign: 'center', cursor: 'pointer'}}
                         variant='danger'
                     >

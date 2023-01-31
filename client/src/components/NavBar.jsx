@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -8,16 +9,15 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 
 import { Context } from '..';
-import { NavLink } from 'react-router-dom';
 import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from '../utils/consts';
 
 const NavBar = observer(() => {
-    const { user } = useContext(Context);
+    const { userStore } = useContext(Context);
     const navigate = useNavigate();
 
     const logOut = () => {
-        user.setIsAuth(false);
-        user.setUser({});
+        userStore.setIsAuth(false);
+        userStore.setUser({});
     };
 
     return (
@@ -25,7 +25,7 @@ const NavBar = observer(() => {
             <Container>
                 <NavLink style={{color: 'var(--light)'}} to={SHOP_ROUTE}>КупиДевайс</NavLink>
 
-                {user.isAuth ? (
+                {userStore.isAuth ? (
                     <Nav className="ml-auto" style={{color: 'var(--light)'}}>
                         <Button onClick={() => navigate(ADMIN_ROUTE)} variant={'outline-light'}>Админ. панель</Button>
                         <Button onClick={() => logOut()} variant={'outline-light'} className='ms-4'>Выйти</Button>

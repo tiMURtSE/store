@@ -8,14 +8,14 @@ import { authRoutes, publicRoutes } from '../routes/routes';
 import { observer } from 'mobx-react-lite';
 
 const AppRouter = observer(() => {
-    const { user } = useContext(Context);
+    const { userStore } = useContext(Context);
     
     return (
         <Routes>
             <Route path='/' element={<SharedLayout />}>
                 <Route index element={<Shop />}/>
 
-                {user.isAuth && (
+                {userStore.isAuth && (
                     authRoutes.map(route => 
                         <Route path={route.path} element={route.element} key={route.path}/>
                     )

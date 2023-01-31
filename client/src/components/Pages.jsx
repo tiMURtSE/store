@@ -1,12 +1,13 @@
-import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useContext } from 'react';
+import { observer } from 'mobx-react-lite';
 import { Pagination } from 'react-bootstrap';
+
 import { Context } from '../index';
 
 const Pages = observer(() => {
-    const { device } = useContext(Context);
-    const pages = Math.ceil(device.totalCount / device.limit);
+    const { deviceStore } = useContext(Context);
+    const pages = Math.ceil(deviceStore.totalCount / deviceStore.limit);
     const totalPages = [];
 
     for (let i = 0; i < pages; i++) {
@@ -17,8 +18,8 @@ const Pages = observer(() => {
         <Pagination className='mt-3'>
             {totalPages.map(page =>
                 <Pagination.Item
-                    active={page === device.selectedPage}
-                    onClick={() => device.setSelectedPage(page)}
+                    active={page === deviceStore.selectedPage}
+                    onClick={() => deviceStore.setSelectedPage(page)}
                     key={page}
                 >
                     {page}

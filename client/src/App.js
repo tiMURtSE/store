@@ -1,29 +1,40 @@
-import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react';
-import { Spinner } from 'react-bootstrap';
 import { BrowserRouter } from 'react-router-dom';
-import { Context } from '.';
+import { observer } from 'mobx-react-lite';
+import { Spinner } from 'react-bootstrap';
 
 import './App.css';
+import { Context } from '.';
 import AppRouter from './components/AppRouter';
-import { check } from './http/userAPI';
+import { checkAuth } from './http/userAPI';
 
 const App = observer(() => {
-    const { user } = useContext(Context);
+    const { userStore } = useContext(Context);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        check().then(data => {
-            user.setIsAuth(true);
-            // в видео тут вместо data стоит true
-            user.setUser(data);    
-        }).finally(() => setIsLoading(false))
+        check();
+        // checkAuth().then(data => {
+        //     userStore.setIsAuth(true);
+        //     userStore.setUser(data);    
+        // }).finally(() => setIsLoading(false))
     }, []);
 
-    if (isLoading) {
-        return <Spinner animation='border'/>
-    }
+    const check = async () => {
+        try {
+            const data = await checkAuth();
 
+            userStore.setIsAuth(true);
+            userStore.setUser(data);            
+        } catch (error) {
+            console.log(error.message);
+        } finally {
+            setIsLoading(false)
+        }
+    };
+
+    if (isLoading) return <Spinner animation='border'/>;
+    
     return (
         <BrowserRouter>
             <AppRouter/>

@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext } from 'react';
 import ReactDOM from 'react-dom/client';
 
 import App from './App';
@@ -11,8 +11,8 @@ const Context = createContext(null);
 root.render(
     <React.StrictMode>
         <Context.Provider value={{
-            user: new UserStore(),
-            device: new DeviceStore(),
+            userStore: new UserStore(),
+            deviceStore: new DeviceStore(),
         }}>
             <App />
         </Context.Provider>

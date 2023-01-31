@@ -1,13 +1,12 @@
+import React, { useEffect, useState, useContext } from 'react';
 import { observer } from 'mobx-react-lite';
-import React, { useEffect } from 'react';
-import { useState } from 'react';
-import { useContext } from 'react';
 import { Modal, Form, Button, Dropdown, Row, Col } from 'react-bootstrap';
+
 import { Context } from '../..';
 import { createDevice, fetchBrands, fetchTypes } from '../../http/deviceAPI';
 
 const CreateDevice = observer(({ show, onHide }) => {
-    const { device } = useContext(Context);
+    const { deviceStore } = useContext(Context);
     const [characteristics, setCharacteristics] = useState([]);
     const [deviceName, setDeviceName] = useState('');
     const [devicePrice, setDevicePrice] = useState(0);
@@ -40,8 +39,8 @@ const CreateDevice = observer(({ show, onHide }) => {
     const addNewDevice = () => {
         const newDevice = new FormData();
 
-        newDevice.append('typeId', device.selectedType.id);
-        newDevice.append('brandId', device.selectedBrand.id);
+        newDevice.append('typeId', deviceStore.selectedType.id);
+        newDevice.append('brandId', deviceStore.selectedBrand.id);
         newDevice.append('name', deviceName);
         newDevice.append('price', `${devicePrice}`);
         newDevice.append('info', JSON.stringify(characteristics));
@@ -53,10 +52,10 @@ const CreateDevice = observer(({ show, onHide }) => {
 
     useEffect(() => {
         fetchTypes()
-            .then(data => device.setTypes(data))
+            .then(data => deviceStore.setTypes(data))
         
         fetchBrands()
-            .then(data => device.setBrands(data))
+            .then(data => deviceStore.setBrands(data))
     }, []);
 
     return (
@@ -74,18 +73,18 @@ const CreateDevice = observer(({ show, onHide }) => {
             <Modal.Body>
                 <Form>
                     <Dropdown className="mt-2">
-                        <Dropdown.Toggle>{device.selectedType.name || 'Выберите тип'}</Dropdown.Toggle>
+                        <Dropdown.Toggle>{deviceStore.selectedType.name || 'Выберите тип'}</Dropdown.Toggle>
                         <Dropdown.Menu>
-                            {device.types.map(type => 
-                                <Dropdown.Item onClick={() => device.setSelectedType(type)} key={type.id}>{type.name}</Dropdown.Item>
+                            {deviceStore.types.map(type => 
+                                <Dropdown.Item onClick={() => deviceStore.setSelectedType(type)} key={type.id}>{type.name}</Dropdown.Item>
                             )}
                         </Dropdown.Menu>
                     </Dropdown>
                     <Dropdown className="mt-2">
-                        <Dropdown.Toggle>{device.selectedBrand.name || 'Выберите бренд'}</Dropdown.Toggle>
+                        <Dropdown.Toggle>{deviceStore.selectedBrand.name || 'Выберите бренд'}</Dropdown.Toggle>
                         <Dropdown.Menu>
-                            {device.brands.map(brand => 
-                                <Dropdown.Item onClick={() => device.setSelectedBrand(brand)} key={brand.id}>{brand.name}</Dropdown.Item>
+                            {deviceStore.brands.map(brand => 
+                                <Dropdown.Item onClick={() => deviceStore.setSelectedBrand(brand)} key={brand.id}>{brand.name}</Dropdown.Item>
                             )}
                         </Dropdown.Menu>
                     </Dropdown>
