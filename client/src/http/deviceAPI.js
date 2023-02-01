@@ -42,3 +42,8 @@ export const fetchOneDevice = async (id) => {
     const { data } = await $host.get('/api/device/' + id);
     return data;
 };
+
+export const fetchBasket = async (devicesId) => {
+    const { data } = await $authHost.post('/api/device/my_basket/', devicesId);
+    return data;
+};

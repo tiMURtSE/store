@@ -10,6 +10,7 @@ export default class DeviceStore {
         this._selectedPage = 1;
         this._totalCount = 0;
         this._limit = 3;
+        this._devicesInUserBasket = [];
         makeAutoObservable(this);
     }
 
@@ -47,6 +48,10 @@ export default class DeviceStore {
         this._limit = limit;
     }
 
+    setDevicesInUserBasket(devices) {
+        this._devicesInUserBasket = devices;
+    }
+
     get types() {
         return this._types;
     }
@@ -78,4 +83,8 @@ export default class DeviceStore {
     get limit() {
         return this._limit;
     }    
+
+    get devicesInUserBasket() {
+        return this._devicesInUserBasket;
+    }
 }

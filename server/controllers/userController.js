@@ -38,7 +38,6 @@ class UserController {
         const {email, password} = req.body;
         const user = await User.findOne({where: {email}});
         const basket = await Basket.findOne({where: {userId: user.id}})
-        console.log(user)
 
         if (!user) {
             return next(ApiError.internal('Пользователь не найден'));
@@ -56,7 +55,6 @@ class UserController {
     }
 
     async check(req, res) {
-        console.log(req.user)
         const token = generateJWT(req.user.id, req.user.email, req.user.role, req.user.basketId);
 
         return res.json({token});

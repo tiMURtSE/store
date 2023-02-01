@@ -51,6 +51,13 @@ class DeviceController {
         return res.json(devices);
     }
 
+    async getBasket(req, res) {
+        const devicesId = req.body;
+        const devices = await Device.findAndCountAll({where: {id: devicesId}});
+
+        return res.json(devices);
+    }
+
     async getOne(req, res) {
         const {id} = req.params;
         const device = await Device.findOne(

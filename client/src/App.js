@@ -23,7 +23,6 @@ const App = observer(() => {
     const check = async () => {
         try {
             const data = await checkAuth();
-            console.log(data)
             userStore.setIsAuth(true);
             userStore.setUser(data);            
         } catch (error) {

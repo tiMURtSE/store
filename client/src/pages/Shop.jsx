@@ -25,7 +25,6 @@ const Shop = observer(() => {
             .then(data => {
                 deviceStore.setDevices(data.rows);
                 deviceStore.setTotalCount(data.count);
-                console.log(data);
             })
     }, [deviceStore.selectedBrand, deviceStore.selectedType, deviceStore.selectedPage]);
 
