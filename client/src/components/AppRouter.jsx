@@ -15,7 +15,7 @@ const AppRouter = observer(() => {
             <Route path='/' element={<SharedLayout />}>
                 <Route index element={<Shop />}/>
 
-                {userStore.isAuth && (
+                {userStore.isUserAuthorized && (
                     authRoutes.map(route => 
                         <Route path={route.path} element={route.element} key={route.path}/>
                     )

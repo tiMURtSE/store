@@ -6,30 +6,32 @@ import { Container, Form, Card, Button, Row } from "react-bootstrap";
 import { LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE } from "../utils/consts";
 import { login, registration } from '../http/userAPI';
 import { Context } from '..';
+import { setAndDecodeToken } from '../utils/usefulFunctions';
 
 const Auth = observer(() => {
     const { userStore } = useContext(Context);
     const location = useLocation();
     const navigate = useNavigate();
-    const isLogin = location.pathname === LOGIN_ROUTE;
+    const isLogInPageOpen = (location.pathname === LOGIN_ROUTE);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const click = async () => {
+    const submitUserCredentials = async () => {
         try {
             let data;
 
-            if (isLogin) {
+            if (isLogInPageOpen) {
                 data = await login(email, password);
             } else {
                 data = await registration(email, password);
             }
 
-            userStore.setIsAuth(true);
-            userStore.setUser(data);
+            const user = setAndDecodeToken(data.token);
+
+            userStore.setIsUserAuthorized(true);
+            userStore.setUser(user);
             navigate(SHOP_ROUTE);
         } catch (error) {
-            console.log(error)
             alert(error.response.data.message);
         }
     };
@@ -40,7 +42,7 @@ const Auth = observer(() => {
             style={{height: window.innerHeight - 54}}
         >
             <Card style={{width: 600}} className="p-5">
-                <h2 className="m-auto">{isLogin ? 'Авторизация' : "Регистрация"}</h2>
+                <h2 className="m-auto">{isLogInPageOpen ? 'Авторизация' : "Регистрация"}</h2>
                 <Form className="d-flex flex-column">
                     <Form.Control
                         className="mt-3"
@@ -56,7 +58,7 @@ const Auth = observer(() => {
                         type="password"
                     />
                     <Row className="d-flex justify-content-between align-items-center mt-3 ps-3 pe-3">
-                        {isLogin ?
+                        {isLogInPageOpen ?
                             <div style={{width: 'auto'}}>
                                 Нет аккаунта? <NavLink to={REGISTRATION_ROUTE}>Зарегистрируйся!</NavLink>
                             </div>
@@ -68,9 +70,9 @@ const Auth = observer(() => {
                         <Button
                             style={{width: 'auto'}}
                             variant={"outline-success"}
-                            onClick={click}
+                            onClick={submitUserCredentials}
                         >
-                            {isLogin ? 'Войти' : 'Регистрация'}
+                            {isLogInPageOpen ? 'Войти' : 'Регистрация'}
                         </Button>
                     </Row>
                 </Form>

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { Modal, Form, Button, Dropdown, Row, Col } from 'react-bootstrap';
 
 import { Context } from '../..';
-import { createDevice, fetchBrands, fetchTypes } from '../../http/deviceAPI';
+import { createDevice, fetchAllBrands, fetchAllTypes } from '../../http/deviceAPI';
 
 const CreateDevice = observer(({ show, onHide }) => {
     const { deviceStore } = useContext(Context);
@@ -51,10 +51,10 @@ const CreateDevice = observer(({ show, onHide }) => {
     };
 
     useEffect(() => {
-        fetchTypes()
+        fetchAllTypes()
             .then(data => deviceStore.setTypes(data))
         
-        fetchBrands()
+        fetchAllBrands()
             .then(data => deviceStore.setBrands(data))
     }, []);
 

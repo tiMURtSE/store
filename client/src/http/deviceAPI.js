@@ -2,48 +2,50 @@ import { $host, $authHost } from ".";
 
 // типы
 export const createType = async (type) => {
-    const { data } = await $authHost.post('/api/type', type);
-    return data;
+    const response = await $authHost.post('/api/type', type);
+    
+    return response.data;
 };
 
-export const fetchTypes = async () => {
-    const { data } = await $host.get('/api/type');
-    return data;
+export const fetchAllTypes = async () => {
+    const response = await $host.get('/api/type');
+
+    return response.data;
 };
 
 // бренды
 export const createBrand = async (brand) => {
-    const { data } = await $authHost.post('/api/brand', brand);
-    return data;
+    const response = await $authHost.post('/api/brand', brand);
+
+    return response.data;
 };
 
-export const fetchBrands = async () => {
-    const { data } = await $host.get('/api/brand');
-    return data;
+export const fetchAllBrands = async () => {
+    const response = await $host.get('/api/brand');
+
+    return response.data;
 };
 
 // девайсы
 export const createDevice = async (brand) => {
-    const { data } = await $authHost.post('/api/device', brand);
-    return data;
+    const response = await $authHost.post('/api/device', brand);
+
+    return response.data;
 };
 
-export const fetchDevices = async (brandId, typeId, limit, page) => {
-    const { data } = await $host.get('/api/device', {params: {
+export const fetchOneDevice = async (id) => {
+    const response = await $host.get('/api/device/' + id);
+    
+    return response.data;
+};
+
+export const fetchAllDevices = async (brandId, typeId, limit, page) => {
+    const response = await $host.get('/api/device', {params: {
         brandId,
         typeId,
         limit,
         page
     }});
-    return data;
-};
 
-export const fetchOneDevice = async (id) => {
-    const { data } = await $host.get('/api/device/' + id);
-    return data;
-};
-
-export const fetchBasket = async (devicesId) => {
-    const { data } = await $authHost.post('/api/device/my_basket/', devicesId);
-    return data;
+    return response.data;
 };

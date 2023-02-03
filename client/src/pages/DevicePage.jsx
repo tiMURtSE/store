@@ -1,45 +1,75 @@
+import React, { useContext, useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import React from 'react';
-import { useContext } from 'react';
-import { useState } from 'react';
-import { useEffect } from 'react';
 import { Button, Card, Col, Container, Form, Image, Row } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
+
 import { Context } from '..';
-import bigStar from '../assets/bigStar.png';
-import { addDeviceInBasket, fetchUserBasket } from '../http/basketAPI';
-import { fetchBasket, fetchOneDevice } from '../http/deviceAPI';
-import { checkAuth } from '../http/userAPI';
+import { addDeviceInBasket, fetchDeviceInBasket, fetchUserBasket } from '../http/basketAPI';
+import { fetchOneDevice } from '../http/deviceAPI';
 import { BASKET_ROUTE } from '../utils/consts';
+import bigStar from '../assets/bigStar.png';
 
 const DevicePage = observer(() => {
-    const { userStore, deviceStore } = useContext(Context);
+    const { userStore } = useContext(Context);
+    const { id } = useParams();
+    const navigate = useNavigate();
     const [device, setDevice] = useState({info: []});
     const [isDeviceInBasket, setIsDeviceInBasket] = useState(false);
-    const navigate = useNavigate();
-    const { id } = useParams();
+
+    const fetchAndSetOneDevice = async () => {
+        try {
+            const device = await fetchOneDevice(id);
+
+            setDevice(device);
+        } catch (error) {
+            console.log(error.message)
+        }
+    };
+
+    const clickAddToCartButton = async () => {
+        const { basketId } = userStore.user;
+        const deviceId = device.id;
+
+        if (!basketId || !deviceId) {
+            alert('Войдите в аккаунт для добавления товара в корзину!');
+            return;
+        }
+
+        addToCart(basketId, deviceId);
+    };
+
+    const addToCart = async (basketId, deviceId) => {
+        try {
+            const response = await addDeviceInBasket(basketId, deviceId);
+
+            alert('Товар добавлен в корзину!');
+        } catch (error) {
+            console.log(error.message)
+        }
+    };
+
+    const checkForDeviceInBasket = async () => {
+        try {
+            const basketId = userStore.user.basketId;
+            const deviceId = device.id;
+
+            if (!basketId || !deviceId) return;
+
+            const deviceInBasket = await fetchDeviceInBasket(basketId, deviceId);
+
+            setIsDeviceInBasket(Boolean(deviceInBasket.id));
+        } catch (error) {
+            console.log('error', error.message);
+        }
+    };
 
     useEffect(() => {
-        fetchOneDevice(id)
-            .then(data => setDevice(data))
+        fetchAndSetOneDevice();
     }, []);
 
     useEffect(() => {
-        getBasket();
-    }, [device])
-
-    const getBasket = async () => {
-        const basket = await fetchUserBasket(userStore.user.id);
-        setIsDeviceInBasket(basket.info.some(currDevice => currDevice.deviceId === device.id))
-    };
-
-    const addToCart = async () => {
-        const { basketId } = await checkAuth();
-        const deviceId = device.id;
-        addDeviceInBasket(basketId, deviceId)
-            .then(data => alert('Товар добавлен в корзину!'))
-            .then(data => getBasket())
-    }
+        checkForDeviceInBasket();
+    }, [device]);
 
     return (
         <Container className='mt-3'>
@@ -67,7 +97,7 @@ const DevicePage = observer(() => {
                     >
                         <h3>От: {device.price} руб.</h3>
                         
-                        {isDeviceInBasket ? (
+                        {(isDeviceInBasket && userStore.user.id) ? (
                             <Button 
                                 onClick={() => navigate(BASKET_ROUTE)}
                                 variant={"outline-dark"}
@@ -76,7 +106,7 @@ const DevicePage = observer(() => {
                             </Button>
                         ) : (
                             <Button 
-                                onClick={addToCart}
+                                onClick={clickAddToCartButton}
                                 variant={"outline-dark"}
                             >
                                 Добавить в корзину

@@ -6,33 +6,34 @@ import { Spinner } from 'react-bootstrap';
 import './App.css';
 import { Context } from '.';
 import AppRouter from './components/AppRouter';
-import { checkAuth } from './http/userAPI';
+import { getUserData } from './http/userAPI';
+import { setAndDecodeToken } from './utils/usefulFunctions';
 
 const App = observer(() => {
     const { userStore } = useContext(Context);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isPageLoading, setIsPageLoading] = useState(true);
 
-    useEffect(() => {
-        check();
-        // checkAuth().then(data => {
-        //     userStore.setIsAuth(true);
-        //     userStore.setUser(data);    
-        // }).finally(() => setIsLoading(false))
-    }, []);
-
-    const check = async () => {
+    const defineUserCredentials = async () => {
         try {
-            const data = await checkAuth();
-            userStore.setIsAuth(true);
-            userStore.setUser(data);            
+            const data = await getUserData();
+            const user = setAndDecodeToken(data.token);
+            
+            userStore.setIsUserAuthorized(true);
+            userStore.setUser(user);            
         } catch (error) {
             console.log(error.message);
         } finally {
-            setIsLoading(false)
+            setIsPageLoading(false);
         }
     };
 
-    if (isLoading) return <Spinner animation='border'/>;
+    useEffect(() => {
+        defineUserCredentials();
+    }, []);
+
+    if (isPageLoading) {
+        return <Spinner animation='border'/>;
+    }
     
     return (
         <BrowserRouter>

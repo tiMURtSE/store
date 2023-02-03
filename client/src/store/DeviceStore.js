@@ -8,9 +8,9 @@ export default class DeviceStore {
         this._selectedType = {};
         this._selectedBrand = {};
         this._selectedPage = 1;
-        this._totalCount = 0;
+        this._totalNumberOfDevices = 0;
         this._limit = 3;
-        this._devicesInUserBasket = [];
+        this._userBasket = [];
         makeAutoObservable(this);
     }
 
@@ -40,16 +40,16 @@ export default class DeviceStore {
         this._selectedPage = page;
     }
 
-    setTotalCount(count) {
-        this._totalCount = count;
+    setTotalNumberOfDevices(number) {
+        this._totalNumberOfDevices = number;
     }
 
     setLimit(limit) {
         this._limit = limit;
     }
 
-    setDevicesInUserBasket(devices) {
-        this._devicesInUserBasket = devices;
+    setUserBasket(devices) {
+        this._userBasket = devices;
     }
 
     get types() {
@@ -76,15 +76,15 @@ export default class DeviceStore {
         return this._selectedPage;
     }
 
-    get totalCount() {
-        return this._totalCount;
+    get totalNumberOfDevices() {
+        return this._totalNumberOfDevices;
     }
 
     get limit() {
         return this._limit;
     }    
 
-    get devicesInUserBasket() {
-        return this._devicesInUserBasket;
+    get userBasket() {
+        return this._userBasket;
     }
 }

@@ -5,7 +5,7 @@ import { Col, Card, Image, Button } from 'react-bootstrap';
 import star from '../assets/star.png';
 import { BASKET_ROUTE, DEVICE_ROUTE } from '../utils/consts';
 import { removeDeviceFromBasket } from '../http/basketAPI';
-import { checkAuth } from '../http/userAPI';
+import { getUserData } from '../http/userAPI';
 import { Context } from '..';
 
 const DeviceItem = ({ device, brandName }) => {
@@ -16,7 +16,7 @@ const DeviceItem = ({ device, brandName }) => {
 
     const removeDevice = async () => {
         try {
-            const { basketId } = await checkAuth();
+            const { basketId } = await getUserData();
             const removedDevice = await removeDeviceFromBasket(device.id, basketId);
 
             const updatedDevices = devicesInUserBasket.filter(currDevice => currDevice.id !== device.id);

@@ -17,3 +17,17 @@ export const removeDeviceFromBasket = async (deviceId, basketId) => {
     }});
     return data;
 }
+
+export const fetchDeviceInBasket = async (basketId, deviceId) => {
+    const { data } = await $authHost.get('/api/basket_device/', {params: {
+        basketId,
+        deviceId
+    }});
+
+    return data;
+};
+
+// export const fetchBasket = async (deviceId) => {
+//     const { data } = await $authHost.post('/api/device/my_basket/', deviceId);
+//     return data;
+// };

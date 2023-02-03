@@ -7,27 +7,47 @@ import TypeBar from '../components/TypeBar';
 import DeviceList from '../components/DeviceList';
 import Pages from '../components/Pages';
 import { Context } from '..';
-import { fetchBrands, fetchDevices, fetchTypes } from '../http/deviceAPI';
+import { fetchAllBrands, fetchAllDevices, fetchAllTypes } from '../http/deviceAPI';
 
 const Shop = observer(() => {
     const { deviceStore } = useContext(Context);
+
+    const fetchAndSetAllTypes = async () => {
+        const types = await fetchAllTypes();
+
+        deviceStore.setTypes(types);
+    };
     
+    const fetchAndSetAllBrands = async () => {
+        const brands = await fetchAllBrands();
+
+        deviceStore.setBrands(brands);
+    };
+
+    const fetchAndSetAllDevices = async () => {
+        const { rows: devices, count: totalNumberOfDevices} = await fetchAllDevices();
+
+        deviceStore.setDevices(devices);
+        deviceStore.setTotalNumberOfDevices(totalNumberOfDevices);
+    };
+
     useEffect(() => {
-        fetchTypes()
-            .then(data => deviceStore.setTypes(data))
-        
-        fetchBrands()
-            .then(data => deviceStore.setBrands(data))
+        try {
+            fetchAndSetAllTypes();
+            fetchAndSetAllBrands();
+        } catch (error) {
+            console.log(error.message);
+        }
     }, []);
 
     useEffect(() => {
-        fetchDevices(deviceStore.selectedBrand.id, deviceStore.selectedType.id, deviceStore.limit, deviceStore.selectedPage)
-            .then(data => {
-                deviceStore.setDevices(data.rows);
-                deviceStore.setTotalCount(data.count);
-            })
+        try {
+            fetchAndSetAllDevices()
+        } catch (error) {
+            console.log(error.message)
+        }
     }, [deviceStore.selectedBrand, deviceStore.selectedType, deviceStore.selectedPage]);
-
+    
     return (
         <Container>
             <Row className="mt-2">

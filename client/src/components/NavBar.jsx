@@ -16,8 +16,10 @@ const NavBar = observer(() => {
     const navigate = useNavigate();
 
     const logOut = () => {
-        userStore.setIsAuth(false);
+        userStore.setIsUserAuthorized(false);
         userStore.setUser({});
+        navigate(SHOP_ROUTE);
+        localStorage.setItem('token', '');
     };
 
     return (
@@ -25,7 +27,7 @@ const NavBar = observer(() => {
             <Container>
                 <NavLink style={{color: 'var(--light)'}} to={SHOP_ROUTE}>КупиДевайс</NavLink>
 
-                {userStore.isAuth ? (
+                {userStore.isUserAuthorized ? (
                     <Nav className="ml-auto" style={{color: 'var(--light)'}}>
                         <Button onClick={() => navigate(ADMIN_ROUTE)} variant={'outline-light'}>Админ. панель</Button>
                         <Button onClick={() => navigate(BASKET_ROUTE)} variant={'outline-light'} className='ms-4'>Корзина</Button>
