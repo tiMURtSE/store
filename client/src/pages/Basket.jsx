@@ -4,50 +4,27 @@ import { observer } from 'mobx-react-lite';
 
 import DeviceItem from '../components/DeviceItem';
 import { getUserData } from '../http/userAPI';
-import { fetchUserBasket } from '../http/basketAPI';
+import { fetchUserBasket, fetchDevicesForBasket } from '../http/basketAPI';
 import { fetchAllBrands, fetchDevices, fetchOneDevice } from '../http/deviceAPI';
 import { Context } from '..';
 
 const Basket = observer(() => {
     const { userStore, deviceStore } = useContext(Context);
-    const [userBasket, setUserBasket] = useState([]);
+    const [userBasket, setUserBasket] = useState([])
 
     const fetchAndSetUserBasket = async () => {
         try {
-            console.log('asd')
             const userId = userStore.user.id;
-            const userBasket = await fetchUserBasket(userId);
+            const { info } = await fetchUserBasket(userId);
+            const userDevicesId = info.map(device => device.deviceId);
+            const { rows: devices } = await fetchDevicesForBasket(userDevicesId);
 
-            setUserBasket(userBasket.info);
+            setUserBasket(devices);
         } catch (error) {
             console.log(error.message)
         }
     };
 
-    useEffect(() => {
-        fetchAndSetUserBasket();
-    }, []);
-
-    console.log(123)
-
-
-
-
-
-
-
-
-
-    // const getBasket = async () => {
-    //     const user = await getUserData();
-    //     const { info: devicesInBasket} = await fetchUserBasket(user.id);
-    //     const devicesId = devicesInBasket.map(device => device.deviceId);
-    //     const devices = await fetchAllBasket(devicesId);
-
-    //     deviceStore.setDevicesInUserBasket(devices.rows);
-    // };
-
-    // // неправильно сделано
     const getBrandName = (brandId) => {
         const brands = deviceStore.brands;
 
@@ -58,17 +35,15 @@ const Basket = observer(() => {
         }
     };
 
-    // useEffect(() => {
-    //     getBasket();
-    //     fetchAllBrands()
-    //         .then(data => deviceStore.setBrands(data))
-    // }, []);
+    useEffect(() => {
+        fetchAndSetUserBasket();
+    }, []);
 
     return (
         <Container>
             <Row className='d-flex'>
                 {userBasket.map(device =>
-                    <DeviceItem key={device.id} device={device} brandName={getBrandName(device.brandId)}/>
+                    <DeviceItem key={device.id} device={device} brandName={getBrandName(device.brandId)} fetchAndSetUserBasket={fetchAndSetUserBasket}/>
                 )} 
             </Row>
         </Container>

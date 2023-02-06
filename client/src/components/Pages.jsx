@@ -6,7 +6,7 @@ import { Context } from '../index';
 
 const Pages = observer(() => {
     const { deviceStore } = useContext(Context);
-    const pages = Math.ceil(deviceStore.totalCount / deviceStore.limit);
+    const pages = Math.ceil(deviceStore.totalNumberOfDevices / deviceStore.limit);
     const totalPages = [];
 
     for (let i = 0; i < pages; i++) {

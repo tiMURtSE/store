@@ -7,21 +7,21 @@ import { BASKET_ROUTE, DEVICE_ROUTE } from '../utils/consts';
 import { removeDeviceFromBasket } from '../http/basketAPI';
 import { getUserData } from '../http/userAPI';
 import { Context } from '..';
+import { remove } from 'mobx';
+import { observer } from 'mobx-react-lite';
 
-const DeviceItem = ({ device, brandName }) => {
-    const { deviceStore } = useContext(Context);
+const DeviceItem = observer(({ device, brandName, fetchAndSetUserBasket }) => {
+    const { userStore, deviceStore } = useContext(Context);
     const navigate = useNavigate();
     const location = useLocation();
     const devicesInUserBasket = deviceStore.devicesInUserBasket;
 
     const removeDevice = async () => {
         try {
-            const { basketId } = await getUserData();
+            const basketId = userStore.user.basketId;
             const removedDevice = await removeDeviceFromBasket(device.id, basketId);
 
-            const updatedDevices = devicesInUserBasket.filter(currDevice => currDevice.id !== device.id);
-            console.log(updatedDevices)
-            deviceStore.setDevicesInUserBasket(updatedDevices);
+            fetchAndSetUserBasket();
             alert("Товар убран из корзины!");
         } catch (error) {
             alert(error.message);
@@ -69,6 +69,6 @@ const DeviceItem = ({ device, brandName }) => {
             }
         </Col>
     );
-};
+});
 
 export default DeviceItem;

@@ -32,7 +32,7 @@ class DeviceController {
     }
     
     async getAll(req, res) {
-        let {brandId, typeId, limit, page} = req.query;
+        let { brandId, typeId, limit, page } = req.query;
         let devices;
         page = page || 1;
         limit = limit || 9;
@@ -53,13 +53,14 @@ class DeviceController {
 
     async getBasket(req, res) {
         const devicesId = req.body;
+        console.log(devicesId)
         const devices = await Device.findAndCountAll({where: {id: devicesId}});
 
         return res.json(devices);
     }
 
     async getOne(req, res) {
-        const {id} = req.params;
+        const { id } = req.params;
         const device = await Device.findOne(
             {
                 where: {id},

@@ -25,7 +25,10 @@ const Shop = observer(() => {
     };
 
     const fetchAndSetAllDevices = async () => {
-        const { rows: devices, count: totalNumberOfDevices} = await fetchAllDevices();
+        const brandId = deviceStore.selectedBrand.id;
+        const typeId = deviceStore.selectedType.id;
+        const page = deviceStore.selectedPage;
+        const { rows: devices, count: totalNumberOfDevices} = await fetchAllDevices(brandId, typeId, 3, page);
 
         deviceStore.setDevices(devices);
         deviceStore.setTotalNumberOfDevices(totalNumberOfDevices);

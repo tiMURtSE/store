@@ -43,6 +43,7 @@ const DevicePage = observer(() => {
             const response = await addDeviceInBasket(basketId, deviceId);
 
             alert('Товар добавлен в корзину!');
+            setIsDeviceInBasket(true);
         } catch (error) {
             console.log(error.message)
         }

@@ -15,6 +15,7 @@ export const removeDeviceFromBasket = async (deviceId, basketId) => {
         deviceId,
         basketId
     }});
+
     return data;
 }
 
@@ -27,7 +28,7 @@ export const fetchDeviceInBasket = async (basketId, deviceId) => {
     return data;
 };
 
-// export const fetchBasket = async (deviceId) => {
-//     const { data } = await $authHost.post('/api/device/my_basket/', deviceId);
-//     return data;
-// };
+export const fetchDevicesForBasket = async (deviceId) => {
+    const { data } = await $authHost.post('/api/device/my_basket/', deviceId);
+    return data;
+};
